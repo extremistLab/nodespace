@@ -36,11 +36,21 @@
 
 // GET ELEMENTS BY TAG NAME
 
-var li = document.getElementsByTagName('li');
-console.log(li);
-console.log(li[2]);
+// var li = document.getElementsByTagName('li');
+// console.log(li);
+// console.log(li[2]);
 
-for(var i=0;i<li.length;i++){
-        li[i].style.fontWeight ='bold';
-    }
+// for(var i=0;i<li.length;i++){
+//         li[i].style.fontWeight ='bold';
+//     }
+
+//QUERY SELECTOR
+
+var header = document.querySelector('#main-header');
+var secondItem = document.querySelector('.list-group-item:nth-child(2)');
+secondItem.style.backgroundColor = 'green';
+
+var thirdItem = document.querySelector('.list-group-item:nth-child(3)');
+thirdItem.style.visibility= 'hidden';
+
 
