@@ -46,11 +46,38 @@
 
 //QUERY SELECTOR
 
-var header = document.querySelector('#main-header');
-var secondItem = document.querySelector('.list-group-item:nth-child(2)');
-secondItem.style.backgroundColor = 'green';
+// var header = document.querySelector('#main-header');
+// var secondItem = document.querySelector('.list-group-item:nth-child(2)');
+// secondItem.style.backgroundColor = 'green';
 
-var thirdItem = document.querySelector('.list-group-item:nth-child(3)');
-thirdItem.style.visibility= 'hidden';
+// var thirdItem = document.querySelector('.list-group-item:nth-child(3)');
+// thirdItem.style.visibility= 'hidden';
+
+//TRAVERSING THE DOM//
+
+var itemList = document.querySelector('#items');
+//parentNode
+//console.log(itemList.parentNode);
+
+//console.log(itemList.childNodes);
+// console.log(itemList.children);
+
+// console.log(itemList.firstChild);
+// console.log(itemList.firstElementChild);
+
+//CREATE ELEMENT// 
+var newDiv = document.createElement('div');
+newDiv.className ='hello';
+newDiv.id = 'hello1';
+
+newDiv.setAttribute('title', 'Hello Div');
+var newDivText = document.createTextNode('Hello World');
+newDiv.appendChild(newDivText);
+
+var container = document.querySelector('header .container');
+var h1=document.querySelector('header h1');
+console.log(newDiv);
+
+container.insertBefore(newDiv, h1);
 
 
