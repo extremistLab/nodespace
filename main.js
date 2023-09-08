@@ -1,67 +1,159 @@
-var form = document.getElementById('addForm');
-var itemList = document.getElementById('items');
-var filter = document.getElementById('filter');
+// GET REQUEST
+function getTodos() {
+  // axios({
+  //   method: 'get',
+  //   url: 'https://jsonplaceholder.typicode.com/todos'
+  // })
+  // .then(res=> console.log(res))
+  // .catch(err => console.log(err));
 
-// Form submit event
-form.addEventListener('submit', addItem);
-// Delete event
-itemList.addEventListener('click', removeItem);
-// Filter event
-filter.addEventListener('keyup', filterItems);
+  axios 
+  .get('https://jsonplaceholder.typicode.com/todos?_limit=5')
+  .then(res=> console.log(res))
+  .catch(err => console.log(err));
 
+}
 
-function addItem(e){
-    e.preventDefault();
-    //get input value
-    var newItem = document.getElementById('item').value;
+// POST REQUEST
+function addTodo() {
+  axios 
+  .post('https://jsonplaceholder.typicode.com/todos',{
+    title: 'New Todo',
+    completed: false
+  })
+  .then(res=> console.log(res))
+  .catch(err => console.log(err));
+}
 
-  // Create new li element
-  var li = document.createElement('li');
-  // Add class
-  li.className = 'list-group-item';
-  // Add text node with input value
-  li.appendChild(document.createTextNode(newItem));
-
-    // Create del button element
-  var deleteBtn = document.createElement('button');
-
-  // Add classes to del button
-  deleteBtn.className = 'btn btn-danger btn-sm float-right delete';
-
-  // Append text node
-  deleteBtn.appendChild(document.createTextNode('X'));
-
-  // Append button to li
-  li.appendChild(deleteBtn);
-
-  // Append li to list
-  itemList.appendChild(li);
+// PUT/PATCH REQUEST
+function updateTodo() {
+  axios 
+  .put('https://jsonplaceholder.typicode.com/todos/1',{
+    title: 'Updated Todo',
+    completed: true
+  })
+  .then(res=> console.log(res))
+  .catch(err => console.log(err));
 
 
 }
-function removeItem(e){
-    if(e.target.classList.contains('delete')){
-        if(confirm('Are You Sure?')){
-            var li = e.target.parentElement;
-            itemList.removeChild(li);
-          }
-        }
-    console.log(1);
+
+
+// DELETE REQUEST
+function removeTodo() {
+  axios 
+  .delete('https://jsonplaceholder.typicode.com/todos/1')
+  .then(res=> console.log(res))
+  .catch(err => console.log(err));
 }
 
-// Filter Items
-function filterItems(e){
-    // convert text to lowercase
-    var text = e.target.value.toLowerCase();
-    // Get lis
-    var items = itemList.getElementsByTagName('li');
-    // Convert to an array
-    Array.from(items).forEach(function(item){
-      var itemName = item.firstChild.textContent;
-      if(itemName.toLowerCase().indexOf(text) != -1){
-        item.style.display = 'block';
-      } else {
-        item.style.display = 'none';
-      }
-    });
+// SIMULTANEOUS DATA
+function getData() {
+  axios
+  .all([
+  axios.get('https://jsonplaceholder.typicode.com/todos?_limit=5'),
+  axios.get('https://jsonplaceholder.typicode.com/posts?_limit=5')
+  ])
+  .then(axios.spread((todos,posts) => showOutput(posts)))
+  .catch(err => console.error(err));
+  
+}
+
+// CUSTOM HEADERS
+function customHeaders() {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization:'sometoken'
+    }
+  };
+  
+  axios 
+  .post('https://jsonplaceholder.typicode.com/todos',{
+    title: 'New Todo',
+    completed: false
+  })
+  .then(res=> console.log(res))
+  .catch(err => console.log(err));
+}
+
+// TRANSFORMING REQUESTS & RESPONSES
+function transformResponse() {
+  console.log('Transform Response');
+}
+
+// ERROR HANDLING
+function errorHandling() {
+  console.log('Error Handling');
+}
+
+// CANCEL TOKEN
+function cancelToken() {
+  console.log('Cancel Token');
+}
+
+// INTERCEPTING REQUESTS & RESPONSES
+axios.interceptors.request.use(
+  config => {
+    console.log(
+      `${config.method.toUpperCase()} request sent to ${
+        config.url
+      } at ${new Date().getTime()}
+      }`
+    );
+    return config;
+  },
+  error => {
+    return Promise.reject(error);
   }
+)
+// AXIOS INSTANCES
+
+// Show output in browser
+function showOutput(res) {
+  document.getElementById('res').innerHTML = `
+  <div class="card card-body mb-4">
+    <h5>Status: ${res.status}</h5>
+  </div>
+
+  <div class="card mt-3">
+    <div class="card-header">
+      Headers
+    </div>
+    <div class="card-body">
+      <pre>${JSON.stringify(res.headers, null, 2)}</pre>
+    </div>
+  </div>
+
+  <div class="card mt-3">
+    <div class="card-header">
+      Data
+    </div>
+    <div class="card-body">
+      <pre>${JSON.stringify(res.data, null, 2)}</pre>
+    </div>
+  </div>
+
+  <div class="card mt-3">
+    <div class="card-header">
+      Config
+    </div>
+    <div class="card-body">
+      <pre>${JSON.stringify(res.config, null, 2)}</pre>
+    </div>
+  </div>
+`;
+}
+
+// Event listeners
+document.getElementById('get').addEventListener('click', getTodos);
+document.getElementById('post').addEventListener('click', addTodo);
+document.getElementById('update').addEventListener('click', updateTodo);
+document.getElementById('delete').addEventListener('click', removeTodo);
+document.getElementById('sim').addEventListener('click', getData);
+document.getElementById('headers').addEventListener('click', customHeaders);
+document
+  .getElementById('transform')
+  .addEventListener('click', transformResponse);
+document.getElementById('error').addEventListener('click', errorHandling);
+document.getElementById('cancel').addEventListener('click', cancelToken);
